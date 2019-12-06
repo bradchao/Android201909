@@ -20,6 +20,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test1(View view) {
+        new Thread(){
+            @Override
+            public void run() {
+                gotoIII();
+            }
+        }.start();
+    }
+
+    private void gotoIII(){
         try {
             URL url = new URL("https://www.iii.org.tw");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -35,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.v("brad", e.toString());
         }
-
-
     }
+
     public void test2(View view) {
 
     }
