@@ -3,6 +3,8 @@ package tw.org.iii.android201909;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -142,13 +144,25 @@ public class MainActivity extends AppCompatActivity {
     private void parseTest4(String json){
         try {
             JSONArray root = new JSONArray(json);
-            Log.v("brad", "count = " + root.length());
+            //Log.v("brad", "count = " + root.length());
             for (int i=0; i<root.length(); i++){
                 JSONObject row = root.getJSONObject(i);
                 String name = row.getString("Name");
                 String tel = row.getString("Tel");
                 String address = row.getString("Address");
-                Log.v("brad", name+":"+tel+":"+address);
+                String coord = row.getString("Coordinate");
+                String[] latlng = coord.split(",");
+
+                // INSERT INTO travel (tname, tel,addr,lat,lng) VALUES ('','','', , );
+                ContentValues values = new ContentValues();
+                values.put("tname", name);
+                values.put("tel", tel);
+                values.put("addr", address);
+                values.put("lat", latlng[0]);
+                values.put("lng", latlng[1]);
+                db.insert("travel", null, values);
+
+
             }
 
 
@@ -157,6 +171,16 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.v("brad", e.toString());
         }
+    }
+
+    public void test5(View view) {
+        // select * from travel
+        Cursor c = db.query(
+                "travel",
+                null, null,null,null,null,null);
+        int count = c.getCount();
+        Log.v("brad", "count = " + count);
+        c.close();
     }
 
 
