@@ -11,6 +11,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,11 +30,14 @@ public class MainActivity extends AppCompatActivity {
     private ImageView img;
     private Bitmap bitmap;
     private UIHandler uiHandler;
+    private TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tv = findViewById(R.id.tv);
 
         uiHandler = new UIHandler();
         img = findViewById(R.id.img);
@@ -95,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.v("brad", response);
+                        tv.setText(response);
                     }
                 },
                 new Response.ErrorListener() {
