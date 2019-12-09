@@ -3,6 +3,7 @@ package tw.org.iii.android201909;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -34,11 +35,16 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap bitmap;
     private UIHandler uiHandler;
     private TextView tv;
+    private MyDBHelper myDBHelper;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myDBHelper = new MyDBHelper(this, "brad", null, 1);
+        db = myDBHelper.getReadableDatabase();
 
         tv = findViewById(R.id.tv);
 
