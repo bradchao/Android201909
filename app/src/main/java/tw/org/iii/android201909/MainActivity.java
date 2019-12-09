@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -213,6 +214,22 @@ public class MainActivity extends AppCompatActivity {
         values.put("lat", "22.456");
         values.put("lng", "123.123");
         db.update("travel",values,"id = ?",new String[]{"264"});
+    }
+
+    public void test8(View view) {
+        ImageRequest request = new ImageRequest(
+                "https://ezgo.coa.gov.tw/Uploads/opendata/AgriStay01/APPLY_D/20151109091447.jpg",
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        img.setImageBitmap(response);
+                    }
+                },
+                0,0,
+                Bitmap.Config.ARGB_8888,
+                null
+        );
+        MainApp.queue.add(request);
     }
 
 
