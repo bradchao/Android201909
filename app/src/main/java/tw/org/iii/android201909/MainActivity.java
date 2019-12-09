@@ -12,7 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.BufferedReader;
@@ -85,7 +89,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test3(View view) {
-
+        String url = "https://www.iii.org.tw";
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("brad", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("brad", error.toString());
+                    }
+                });
+        MainApp.queue.add(request);
 
     }
 
