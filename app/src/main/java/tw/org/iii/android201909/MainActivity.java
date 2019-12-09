@@ -199,8 +199,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test6(View view) {
-        // delete from travel
-        db.delete("travel",null, null);
+        // delete from travel where id = 258 and tname like '飛牛%'
+        db.delete("travel","id = ? and tname like ?", new String[]{"258", "飛牛%"});
     }
 
 
