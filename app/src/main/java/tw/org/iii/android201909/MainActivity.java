@@ -177,7 +177,10 @@ public class MainActivity extends AppCompatActivity {
         // select * from travel
         Cursor c = db.query(
                 "travel",
-                new String[]{"id","tname","lat","lng"}, null,null,null,null,null);
+                new String[]{"id","tname","lat","lng"},
+                "id > ? and id < ?",new String[]{"255","300"},
+                null,null,
+                "id DESC LIMIT 20");
 //        int count = c.getCount();
 //        Log.v("brad", "count = " + count);
 
