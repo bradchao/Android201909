@@ -177,10 +177,30 @@ public class MainActivity extends AppCompatActivity {
         // select * from travel
         Cursor c = db.query(
                 "travel",
-                null, null,null,null,null,null);
-        int count = c.getCount();
-        Log.v("brad", "count = " + count);
+                new String[]{"id","tname","lat","lng"}, null,null,null,null,null);
+//        int count = c.getCount();
+//        Log.v("brad", "count = " + count);
+
+        int fieldId = c.getColumnIndex("id");
+        int fieldName = c.getColumnIndex("tname");
+        int fieldLat = c.getColumnIndex("lat");
+        int fieldLng = c.getColumnIndex("lng");
+
+        while (c.moveToNext()){
+            String id = c.getString(fieldId);
+            String name = c.getString(fieldName);
+            String lat = c.getString(fieldLat);
+            String lng = c.getString(fieldLng);
+            Log.v("brad", id + ":" + name + ":" + lat +":" + lng);
+        }
+
+
         c.close();
+    }
+
+    public void test6(View view) {
+        // delete from travel
+        db.delete("travel",null, null);
     }
 
 
