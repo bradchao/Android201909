@@ -112,6 +112,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void test4(View view) {
+        String url = "http://data.coa.gov.tw/Service/OpenData/ODwsv/ODwsvTravelStay.aspx";
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("brad", response);
+                        tv.setText(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.v("brad", error.toString());
+                    }
+                });
+        MainApp.queue.add(request);
+    }
+
     private class UIHandler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
