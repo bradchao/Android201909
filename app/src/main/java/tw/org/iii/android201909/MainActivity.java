@@ -203,6 +203,15 @@ public class MainActivity extends AppCompatActivity {
         db.delete("travel","id = ? and tname like ?", new String[]{"258", "飛牛%"});
     }
 
+    public void test7(View view) {
+        // UPDATE travel SET tname='小漢山休閒農場',lat=22.456, lng=123.123 WHERE id = 264
+        ContentValues values = new ContentValues();
+        values.put("tname", "小漢山休閒農場");
+        values.put("lat", "22.456");
+        values.put("lng", "123.123");
+        db.update("travel",values,"id = ?",new String[]{"264"});
+    }
+
 
     private class UIHandler extends Handler {
         @Override
