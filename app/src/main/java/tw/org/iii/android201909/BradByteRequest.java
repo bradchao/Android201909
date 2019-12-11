@@ -5,9 +5,13 @@ import androidx.annotation.Nullable;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.toolbox.HttpHeaderParser;
+
+import java.util.Map;
 
 public class BradByteRequest extends Request<byte[]> {
     private Response.Listener<byte[]> listener;
+    private Map<String,String> responseHeader;
 
     public BradByteRequest(int method,
                            String url,
@@ -19,7 +23,8 @@ public class BradByteRequest extends Request<byte[]> {
 
     @Override
     protected Response<byte[]> parseNetworkResponse(NetworkResponse response) {
-        return null;
+        responseHeader = response.headers;
+        return Response.success(response.data, HttpHeaderParser.parseCacheHeaders(response));
     }
 
     @Override
