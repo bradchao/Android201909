@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -42,6 +43,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView img;
@@ -161,8 +163,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test4(View view) {
+//        String url = "http://data.coa.gov.tw/Service/OpenData/ODwsv/ODwsvTravelStay.aspx";
+//        StringRequest request = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        parseTest4(response);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.v("brad", error.toString());
+//                    }
+//                });
+//        MainApp.queue.add(request);
         String url = "http://data.coa.gov.tw/Service/OpenData/ODwsv/ODwsvTravelStay.aspx";
-        StringRequest request = new StringRequest(Request.Method.GET, url,
+        StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -174,7 +191,15 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.v("brad", error.toString());
                     }
-                });
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("name", "brad");
+                params.put("passwd", "123456");
+                return params;
+            }
+        };
         MainApp.queue.add(request);
     }
 
