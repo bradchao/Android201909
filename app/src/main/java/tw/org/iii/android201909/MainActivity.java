@@ -2,13 +2,18 @@ package tw.org.iii.android201909;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.ContentValues;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -16,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,6 +36,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -43,10 +51,35 @@ public class MainActivity extends AppCompatActivity {
     private MyDBHelper myDBHelper;
     private SQLiteDatabase db;
 
+    private File sdroot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    123);
+
+        }else{
+            init();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        init();
+    }
+
+    private void init(){
+        sdroot = Environment.getExternalStorageDirectory();
 
         myDBHelper = new MyDBHelper(this, "brad", null, 1);
         db = myDBHelper.getReadableDatabase();
@@ -56,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         uiHandler = new UIHandler();
         img = findViewById(R.id.img);
     }
+
 
     public void test1(View view) {
         new Thread(){
@@ -247,6 +281,45 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void test10(View view) {
+        BradByteRequest request = new BradByteRequest(Request.Method.GET,
+                "https://pdfmyurl.com/index.php?url=http://www.iii.org.tw",
+                new Response.Listener<byte[]>() {
+                    @Override
+                    public void onResponse(byte[] response) {
+                        Log.v("brad", "OK");
+                        saveFile(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("brad", error.toString());
+            }
+        });
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10*1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        MainApp.queue.add(request);
+    }
+
+    private void saveFile(byte[] data){
+        Log.v("brad", "len = " + data.length);
+        File save = new File(sdroot, "bradpchome.pdf");
+        try {
+            FileOutputStream fout = new FileOutputStream(save);
+            fout.write(data);
+            fout.flush();
+            fout.close();
+        }catch (Exception e){
+            Log.v("brad", e.toString());
+        }
+
+    }
+
 
 
     private class UIHandler extends Handler {

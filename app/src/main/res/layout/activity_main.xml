@@ -48,6 +48,11 @@
         android:layout_height="wrap_content"
         android:text="test8"
         android:onClick="test8"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test10"
+        android:onClick="test10"/>
     <ImageView
         android:id="@+id/img"
         android:layout_width="wrap_content"
